@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static view.test.calc;
+
 public class CalculatorPanel extends JPanel {
 
     private JButton display;
@@ -90,6 +92,9 @@ public class CalculatorPanel extends JPanel {
 
             if (command.equals("=")){
                 System.out.println(display.getText());
+                double result = calc(display.getText());
+                String total2 = Double.toString(result);
+                display.setText(total2);
                 //String str = display.getText();
                 //str.split("(");
             } else if (command.equals("AC")){

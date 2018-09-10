@@ -25,9 +25,9 @@ public class test {
         // HashMap работает быстрее, а отсутствующая сортировка нам не нужна
         ConstMOper = new HashMap<String, Integer>();
         ConstMOper.put("*", 1);
-        ConstMOper.put("/", 2);
-        ConstMOper.put("-", 3);
-        ConstMOper.put("+", 3);
+        ConstMOper.put("/", 1);
+        ConstMOper.put("-", 2);
+        ConstMOper.put("+", 2);
     }
 
     // преобразование выражения в обратную польскую запись
@@ -196,10 +196,10 @@ public class test {
         return (double) Math.round(result.pop()*100000)/100000;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         System.out.print("Input expression: ");
         String expression = in.nextLine();
         System.out.println("result: " + calc(expression));
-    }
+    }*/
 }
