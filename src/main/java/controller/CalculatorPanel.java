@@ -14,9 +14,98 @@ public class CalculatorPanel extends JPanel {
     private JTextArea display;
     private JPanel panel;
     private boolean start;
+    /*
+    // координаты текущей ячейки
+    private int gridx, gridy;
+    // настраиваемый объект GridBagConstraints
+    private GridBagConstraints constraints;
 
+    public GridBagConstraints get() {
+        return constraints;
+    }
+
+    public CalculatorPanel nextCell() {
+        constraints = new GridBagConstraints();
+        constraints.gridx = gridx++;
+        constraints.gridy = gridy;
+        // для удобства возвращаем себя
+        return this;
+    }
+
+    public CalculatorPanel nextRow() {
+        gridy++;
+        gridx = 0;
+        constraints.gridx = 0;
+        constraints.gridy = gridy;
+        return this;
+    }
+
+    public CalculatorPanel span() {
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        return this;
+    }
+
+    public CalculatorPanel fillHorizontally() {
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        return this;
+    }
+
+    // вставляет распорку справа
+    public CalculatorPanel gap(int size) {
+        constraints.insets.right = size;
+        return this;
+    }
+
+    public CalculatorPanel spanY() {
+        constraints.gridheight = GridBagConstraints.REMAINDER;
+        return this;
+    }
+
+
+    public CalculatorPanel fillBoth() {
+        constraints.fill = GridBagConstraints.BOTH;
+        return this;
+    }
+
+    public CalculatorPanel alignLeft() {
+        constraints.anchor = GridBagConstraints.LINE_START;
+        return this;
+    }
+
+    public CalculatorPanel alignRight() {
+        constraints.anchor = GridBagConstraints.LINE_END;
+        return this;
+    }
+
+    public CalculatorPanel setInsets(int left, int top, int right, int bottom) {
+        Insets i = new Insets(top, left, bottom, right);
+        constraints.insets = i;
+        return this;
+    }
+
+    public CalculatorPanel setWeights(float horizontal, float vertical) {
+        constraints.weightx = horizontal;
+        constraints.weighty = vertical;
+        return this;
+    }
+
+    public void insertEmptyRow(Container c, int height) {
+        Component comp = Box.createVerticalStrut(height);
+        nextCell().nextRow().fillHorizontally().span();
+        c.add(comp, get());
+        nextRow();
+    }
+
+    public void insertEmptyFiller(Container c) {
+        Component comp = Box.createGlue();
+        nextCell().nextRow().fillBoth().span().spanY().setWeights(1.0f, 1.0f);
+        c.add(comp, get());
+        nextRow();
+    }*/
 
     public CalculatorPanel() {
+        GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints c = new GridBagConstraints();
         setLayout(new BorderLayout());
         start = true;
 
@@ -28,42 +117,56 @@ public class CalculatorPanel extends JPanel {
         ActionListener command = new CommandAction();
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 4));
+        //panel.setLayout(new GridLayout(5, 4));
+        panel.setLayout(gridbag);
 
-        addButton("AC", command);
-        addButton("(", insert);
-        addButton(")", insert);
-        addButton("/", insert);
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
 
-        addButton("7", insert);
-        addButton("8", insert);
-        addButton("9", insert);
-        addButton("*", insert);
+        addButton("AC", command, gridbag, c);
+        addButton("(", insert, gridbag, c);
+        addButton(")", insert, gridbag, c);
+        addButton("/", insert, gridbag, c);
 
-
-        addButton("4", insert);
-        addButton("5", insert);
-        addButton("6", insert);
-        addButton("-", insert);
-
-        addButton("1", insert);
-        addButton("2", insert);
-        addButton("3", insert);
-        addButton("+", insert);
-
-        addButton("0", insert);
-        addButton(".", insert);
-        addButton("=", command);
-        addButton("DEL", command);
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.weightx = 0.0;
+        //c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.gridwidth = 1;                //reset to the default
+        c.gridheight = 2;
+        addButton("7", insert, gridbag, c);
+        addButton("8", insert, gridbag, c);
+        addButton("9", insert, gridbag, c);
+        addButton("*", insert, gridbag, c);
 
 
-        add(panel, BorderLayout.CENTER);
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        addButton("4", insert, gridbag, c);
+        addButton("5", insert, gridbag, c);
+        addButton("6", insert, gridbag, c);
+        addButton("-", insert, gridbag, c);
+
+
+        addButton("1", insert, gridbag, c);
+        addButton("2", insert, gridbag, c);
+        addButton("3", insert, gridbag, c);
+        addButton("+", insert, gridbag, c);
+
+
+        addButton("0", insert, gridbag, c);
+        addButton(".", insert, gridbag, c);
+        addButton("=", command, gridbag, c);
+        addButton("DEL", command, gridbag, c);
+
+
+        add(panel, GridBagConstraints.BOTH);
 
 
     }
 
-    private void addButton(String label, ActionListener listener) {
+    private void addButton(String label, ActionListener listener, GridBagLayout gridbag, GridBagConstraints c) {
         JButton button = new JButton(label);
+        gridbag.setConstraints(button, c);
         button.addActionListener(listener);
         panel.add(button);
     }
