@@ -1,28 +1,13 @@
-package view;
-
-/**
- * Задача:
- * Требуется разработать консольное приложение на языке Java, интерпретирующее
- * математические выражения. Должны поддерживаться арифметические операции (сложение, вычитание, умножение, деление),
- * скобки, функции (sin, cos и exp), а также константы PI и E (число Эйлера). Между
- * операторами и скобками может быть произвольное число пробелов или не быть
- * совсем. Выражение читается из аргументов командной строки.
- * Входные данные: строка с математическим выражением.
- * Выходные данные: результат вычисления выражения с точностью до 5 знака после
- * запятой.
- * Пример:
- * Входные данные: "11 + (exp(2.010635 + sin(PI/2)*3) + 50) / 2".
- * Выходные данные: 111.00000 (допускается небольшое отклонение).
- */
+package service;
 
 import java.util.*;
 
-public class test {
+public class CalculateService {
 
     // Создаём ассоциативный массив операций со значениями - приоритетами операций
-    public static final Map<String, Integer> ConstMOper;
+    private static final Map<String, Integer> ConstMOper;
+
     static {
-        // HashMap работает быстрее, а отсутствующая сортировка нам не нужна
         ConstMOper = new HashMap<String, Integer>();
         ConstMOper.put("*", 1);
         ConstMOper.put("/", 1);
@@ -31,7 +16,7 @@ public class test {
     }
 
     // преобразование выражения в обратную польскую запись
-    public static String infixToRPN(String expression, Map<String, Integer> operations) {
+    private static String infixToRPN(String expression, Map<String, Integer> operations) {
         // задаём скобки
         String leftBr = "(";
         String rightBr = ")";
@@ -58,7 +43,6 @@ public class test {
             // следующая операция
             String nextOp = "";
             // Поиск следующей операции путём перебора всего списка операция и сравнения
-            // TODO: подумать над другим вариантом поиска
             for (String op : opers) {
                 // i - последняя операциия в выражении, начиная с точки отсчёта index
                 int i = expression.indexOf(op, index);
@@ -88,7 +72,7 @@ public class test {
                         listRPN.add(stackOp.pop());
                         // если стек опустел, значит кто-то накосячил в исходном выражении со скобками
                         if (stackOp.empty()) {
-                            //TODO: обработка ошибки
+                            System.out.println("Empty Stack!");
                         }
                     }
                     // удаляем открвающуюся скобку
@@ -139,8 +123,7 @@ public class test {
         Stack<Double> result = new Stack<Double>();
 
         // перебираем полученные элементы
-        for (int i = 0; i < elems.length; i++){
-            String e = elems[i];
+        for (String e : elems) {
             // если элемент - операнд, помещаем его в стек
             if (!ConstMOper.keySet().contains(e)) {
                 if (e.equals("pi") || e.equals("Pi") || e.equals("PI")) {
@@ -167,27 +150,6 @@ public class test {
                 } else if ("-".equals(e)) {
                     result.push(op1 - op2);
 
-                } else if ("^".equals(e)) {
-                    result.push(Math.pow(op1, op2));
-
-                } else if ("sin".equals(e)) {
-                    if (op1 != 0) {
-                        result.push(op1);
-                    }
-                    result.push(Math.sin(op2));
-
-                } else if ("cos".equals(e)) {
-                    if (op1 != 0) {
-                        result.push(op1);
-                    }
-                    result.push(Math.cos(op2));
-
-                } else if ("exp".equals(e)) {
-                    if (op1 != 0) {
-                        result.push(op1);
-                    }
-                    result.push(Math.exp(op2));
-
                 } else {
                     System.out.println("Error!");
                 }
@@ -196,10 +158,4 @@ public class test {
         return (double) Math.round(result.pop()*100000)/100000;
     }
 
-    /*public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        System.out.print("Input expression: ");
-        String expression = in.nextLine();
-        System.out.println("result: " + calc(expression));
-    }*/
 }

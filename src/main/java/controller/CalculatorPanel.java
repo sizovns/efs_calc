@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 
 import javax.swing.*;
@@ -7,25 +7,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static view.test.calc;
+import static service.CalculateService.calc;
 
 public class CalculatorPanel extends JPanel {
 
-    private JButton display;
+    private JTextArea display;
     private JPanel panel;
-    private double result;
-    private String lastCommand;
     private boolean start;
 
 
     public CalculatorPanel() {
         setLayout(new BorderLayout());
-        result = 0;
-        lastCommand = "=";
         start = true;
 
-        display = new JButton("0");
-        display.setEnabled(false);
+        display = new JTextArea();
+        display.setEnabled(true);
         add(display, BorderLayout.NORTH);
 
         ActionListener insert = new InsertAction();
@@ -76,33 +72,24 @@ public class CalculatorPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
-            /*if (start) {
-                if (command.equals("-")) {
-                    display.setText(command);
-                    start = false;
-                } else {
-                    lastCommand = command;
-                }
-            } else {
-                calculate(Double.parseDouble(display.getText()));
-                lastCommand = command;
-                start = true;
-            }*/
-
-
-            if (command.equals("=")){
-                System.out.println(display.getText());
-                double result = calc(display.getText());
-                String total2 = Double.toString(result);
-                display.setText(total2);
-                //String str = display.getText();
-                //str.split("(");
-            } else if (command.equals("AC")){
+            if (command.equals("=")) {
+                try {
+                    double result = calc(display.getText());
+                    String total2 = Double.toString(result);
+                    display.setText(total2);
+                } catch (NumberFormatException ex) {
+                    display.setText("ERROR! Only math working here!! Press AC to clean this window");
+                                    }
+            } else if (command.equals("AC")) {
                 display.setText("0");
-            } else if (command.equals("DEL")){
+            } else if (command.equals("DEL")) {
                 String str = display.getText();
-                int lastIndex = str.length() - 1;
-                display.setText(str.substring(0,lastIndex-1));
+                if (!(str.length() <= 1)) {
+                    int lastIndex = str.length() - 1;
+                    display.setText(str.substring(0, lastIndex));
+                } else {
+                    display.setText("0");
+                }
             }
         }
     }
@@ -116,24 +103,6 @@ public class CalculatorPanel extends JPanel {
             }
             display.setText(display.getText() + input);
         }
-    }
-
-
-    public void calculate(double x) {
-        if (lastCommand.equals("+")) {
-            result += x;
-        } else if (lastCommand.equals("-")) {
-            result -= x;
-        } else if (lastCommand.equals("/")) {
-            result /= x;
-        } else if (lastCommand.equals("*")) {
-            result *= x;
-        } else if (lastCommand.equals("=")) {
-            result = x;
-        } else if (lastCommand.equals("AC")) {
-            result = 0;
-        }
-        display.setText("" + result);
     }
 
 }
