@@ -54,6 +54,7 @@ public class CalculatorView extends JFrame {
         ImageIcon img = new ImageIcon("src\\main\\resources\\1.png");
         setIconImage(img.getImage());
         add(new CalculatorPanel());
+        //pack();
         setVisible(true);
     }
 
