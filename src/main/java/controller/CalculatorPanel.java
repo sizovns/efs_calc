@@ -18,8 +18,6 @@ public class CalculatorPanel extends JPanel {
     private JTextPane display;
     private JPanel panel;
     private boolean start;
-    private SimpleAttributeSet attrs;
-    private StyledDocument doc;
 
 
     public CalculatorPanel() {
@@ -29,9 +27,9 @@ public class CalculatorPanel extends JPanel {
         start = true;
 
         display = new JTextPane();
-        attrs = new SimpleAttributeSet();
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
         StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_CENTER);
-        doc = (StyledDocument) display.getDocument();
+        StyledDocument doc = (StyledDocument) display.getDocument();
         try {
             doc.insertString(0, "", attrs);
         } catch (BadLocationException e) {
@@ -143,7 +141,7 @@ public class CalculatorPanel extends JPanel {
                     double result = calc(display.getText());
                     String total2 = Double.toString(result);
                     display.setText(total2);
-                } catch (NumberFormatException ex) {
+                } catch (NumberFormatException | ArithmeticException ex) {
                     display.setText("ERROR! Only math working here!! Press AC to clean this window");
                 }
             } else if (command.equals("AC")) {

@@ -49,12 +49,10 @@ public class CalculatorView extends JFrame {
         });
 
 
-        //setBounds(100, 100, 465, 500);
         setTitle("Calculator");
         ImageIcon img = new ImageIcon("src\\main\\resources\\1.png");
         setIconImage(img.getImage());
         add(new CalculatorPanel());
-        //pack();
         setVisible(true);
     }
 
@@ -70,8 +68,6 @@ public class CalculatorView extends JFrame {
         frameLocation = new Point(x, y);
         int state = prefs.getInt(PREF_STATE, JFrame.NORMAL);
         setExtendedState(state);
-        System.out.println("Initial size: " + frameSize);
-        System.out.println("Initial location: " + frameLocation);
     }
 
     private void saveSettings() {

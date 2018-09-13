@@ -8,7 +8,7 @@ public class CalculateService {
     private static final Map<String, Integer> ConstMOper;
 
     static {
-        ConstMOper = new HashMap<String, Integer>();
+        ConstMOper = new HashMap<>();
         ConstMOper.put("*", 1);
         ConstMOper.put("/", 1);
         ConstMOper.put("-", 2);
@@ -99,7 +99,7 @@ public class CalculateService {
             listRPN.add(stackOp.pop());
         }
         // результирующая строка
-        StringBuffer rpn = new StringBuffer();
+        StringBuilder rpn = new StringBuilder();
         // если результирующий список не пуст,
         if (!listRPN.isEmpty()) {
             // переносим в результирующую строку первый элемент
@@ -126,23 +126,34 @@ public class CalculateService {
         for (String e : elems) {
             // если элемент - операнд, помещаем его в стек
             if (!ConstMOper.keySet().contains(e)) {
-                if (e.equals("pi") || e.equals("Pi") || e.equals("PI")) {
-                    result.push(Math.PI);
-                } else if (e.equals("e") || e.equals("E")) {
-                    result.push(Math.E);
-                } else {
-                    result.push(new Double(e));
+                switch (e) {
+                    case "pi":
+                    case "Pi":
+                    case "PI":
+                        result.push(Math.PI);
+                        break;
+                    case "e":
+                    case "E":
+                        result.push(Math.E);
+                        break;
+                    default:
+                        result.push(new Double(e));
+                        break;
                 }
             } else {
                 // если элемент - операция, получаем операнды из результирующего стека для вычисления значения
                 Double op2 = result.pop();
-                Double op1 = result.empty() ? 0 : result.pop();
+                Double op1 = result.empty() ? 0.0 : result.pop();
                 // производим вычисления
                 if ("*".equals(e)) {
                     result.push(op1 * op2);
 
                 } else if ("/".equals(e)) {
-                    result.push(op1 / op2);
+                    if (op2 != 0) {
+                        result.push(op1 / op2);
+                    } else {
+                        throw new ArithmeticException();
+                    }
 
                 } else if ("+".equals(e)) {
                     result.push(op1 + op2);
@@ -155,7 +166,7 @@ public class CalculateService {
                 }
             }
         }
-        return (double) Math.round(result.pop()*100000)/100000;
+        return (double) Math.round(result.pop() * 100000) / 100000;
     }
 
 }
